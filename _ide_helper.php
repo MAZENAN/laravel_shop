@@ -1674,7 +1674,7 @@ namespace Illuminate\Support\Facades {
                         return $instance->createTokenDriver($name, $config);
         }
         
-        /**
+        /**routes
          * Get the default authentication driver name.
          *
          * @return string 

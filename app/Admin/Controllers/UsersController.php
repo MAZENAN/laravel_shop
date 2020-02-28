@@ -43,15 +43,7 @@ class UsersController extends AdminController
         $grid->created_at('注册时间');
         // 不在页面显示 `新建` 按钮，因为我们不需要在后台新建用户
         $grid->disableCreateButton();
-
-        $grid->actions(function ($actions) {
-            // 不在每一行后面展示查看按钮
-            $actions->disableView();
-            // 不在每一行后面展示删除按钮
-//            $actions->disableDelete();
-            // 不在每一行后面展示编辑按钮
-            $actions->disableEdit();
-        });
+        $grid->disableActions();
 
         $grid->tools(function ($tools) {
             // 禁用批量删除按钮
@@ -59,46 +51,12 @@ class UsersController extends AdminController
                 $batch->disableDelete();
             });
         });
+
+        $grid->filter(function ($filter)
+        {
+            $filter->like('name', '用户名');
+            $filter->like('email', '邮件');
+        });
         return $grid;
-    }
-
-    /**
-     * Make a show builder.
-     *
-     * @param mixed $id
-     * @return Show
-     */
-    protected function detail($id)
-    {
-        $show = new Show(User::findOrFail($id));
-
-        $show->field('id', __('Id'));
-        $show->field('name', __('Name'));
-        $show->field('email', __('Email'));
-        $show->field('email_verified_at', __('Email verified at'));
-        $show->field('password', __('Password'));
-        $show->field('remember_token', __('Remember token'));
-        $show->field('created_at', __('Created at'));
-        $show->field('updated_at', __('Updated at'));
-
-        return $show;
-    }
-
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
-    protected function form()
-    {
-        $form = new Form(new User);
-
-        $form->text('name', __('Name'));
-        $form->email('email', __('Email'));
-        $form->datetime('email_verified_at', __('Email verified at'))->default(date('Y-m-d H:i:s'));
-        $form->password('password', __('Password'));
-        $form->text('remember_token', __('Remember token'));
-
-        return $form;
     }
 }
