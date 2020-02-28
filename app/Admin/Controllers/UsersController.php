@@ -35,8 +35,11 @@ class UsersController extends AdminController
         $grid = new Grid(new User);
 
         $grid->id('ID');
-        $grid->name('用户名');
-        $grid->email('邮箱');
+        $grid->name('用户名')->editable();
+        $grid->email('邮箱')->display(function ()
+        {
+            return '<span style="color: red;">' . $this->email  . '</span>';
+        });
         $grid->email_verified_at('已验证邮箱')->display(function ($value) {
             return $value ? '是' : '否';
         });
