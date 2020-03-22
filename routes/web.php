@@ -16,7 +16,6 @@ $clientSecret = '8ACEOdOjfKpma8j6M4shQif9Ak1L8FWNrGePzy11';
 
 Route::redirect('/', '/products')->name('root');
 Route::get('products', 'ProductsController@index')->name('products.index');
-Route::get('products/{product}', 'ProductsController@show')->name('products.show');
 
 Auth::routes(['verify' => true]);
 
@@ -34,8 +33,9 @@ Route::group([
     //用户收藏
     Route::post('products/{product}/favorite', 'ProductsController@favor')->name('products.favor');
     Route::delete('products/{product}/favorite', 'ProductsController@disfavor')->name('products.disfavor');
+    Route::get('products/favorites', 'ProductsController@favorites')->name('products.favorites');
 });
-
+Route::get('products/{product}', 'ProductsController@show')->name('products.show');
 //测试oauth
 // 第三方登陆，重定向
 Route::get('/apidemo/login',
