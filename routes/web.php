@@ -16,6 +16,7 @@ $clientSecret = '8ACEOdOjfKpma8j6M4shQif9Ak1L8FWNrGePzy11';
 
 Route::redirect('/', '/products')->name('root');
 Route::get('products', 'ProductsController@index')->name('products.index');
+Route::get('products/{product}', 'ProductsController@show')->name('products.show');
 
 Auth::routes(['verify' => true]);
 
