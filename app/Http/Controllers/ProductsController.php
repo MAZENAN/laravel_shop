@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Exceptions\InvalidRequestException;
 use App\Http\Requests\Request;
 use App\Models\Product;
-use mysql_xdevapi\Exception;
 
 class ProductsController extends Controller
 {
@@ -40,12 +39,52 @@ class ProductsController extends Controller
         ]);
     }
 
-    public function show(Product $product)
+    public function show(Request $request, Product $product)
     {
         if (!$product->on_sale) {
             throw new InvalidRequestException('商品未上架');
         }
 
-        return view('product.show',['product' => $product]);
+        $favored = false;
+        if ($user = $request->user()) {
+            $favored = boolval($user->favoriteProducts->find($product->id));
+        }
+
+        return view('product.show',['product' => $product, 'favored' => $favored]);
+    }
+
+    /**
+     * 收藏
+     *
+     * @param Product $product
+     * @param Request $request
+     * @return array
+     */
+    public function favor(Product $product, Request $request)
+    {
+        $user = $request->user();
+        if ($user->favoriteProducts()->find($product->id)) {
+            return [];
+        }
+
+        $user->favoriteProducts()->attach($product);
+
+        return [];
+    }
+
+
+    /**
+     * 取消收藏
+     *
+     * @param Product $product
+     * @param Request $request
+     * @return array
+     */
+    public function disfavor(Product $product, Request $request)
+    {
+        $user = $request->user();
+        $user->favoriteProducts()->detach($product);
+
+        return [];
     }
 }
